@@ -5,14 +5,66 @@ command_exists() {
   command -v "$1" >/dev/null 2>&1
 }
 
+# Parse command line arguments
+NON_INTERACTIVE=false
+INSTALL_ALL=false
+SHOW_HELP=false
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --non-interactive)
+      NON_INTERACTIVE=true
+      shift
+      ;;
+    --install-all)
+      INSTALL_ALL=true
+      NON_INTERACTIVE=true
+      shift
+      ;;
+    --help)
+      SHOW_HELP=true
+      shift
+      ;;
+    *)
+      echo "Unknown option: $1"
+      exit 1
+      ;;
+  esac
+done
+
+# Display help if requested
+if [[ $SHOW_HELP == true ]]; then
+  echo "macOS Development Environment Installer"
+  echo ""
+  echo "Usage: ./install.sh [OPTIONS]"
+  echo ""
+  echo "Options:"
+  echo "  --non-interactive    Run without user prompts (skips all installations)"
+  echo "  --install-all        Install all components without prompting"
+  echo "  --help               Show this help message"
+  echo ""
+  exit 0
+fi
+
 # Ensure Homebrew is installed
 if ! command_exists brew; then
-  echo "Homebrew is not installed. Please install Homebrew from https://brew.sh/ and run this script again."
-  exit 1
+  echo "Homebrew is not installed. Installing Homebrew..."
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  
+  # Add Homebrew to PATH for ARM Macs if needed
+  if [[ $(uname -m) == 'arm64' ]]; then
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  fi
 fi
 
 # Step 1: Install zsh prompt and download config
-read -p "Do you want to install zsh and download the config? (y/n): " install_zsh
+if [[ $NON_INTERACTIVE == true ]]; then
+  install_zsh=$([[ $INSTALL_ALL == true ]] && echo "y" || echo "n")
+else
+  read -p "Do you want to install zsh and download the config? (y/n): " install_zsh
+fi
+
 if [[ $install_zsh == "y" || $install_zsh == "Y" ]]; then
   if ! command_exists zsh; then
     echo "Installing zsh..."
@@ -35,7 +87,12 @@ if [[ $install_zsh == "y" || $install_zsh == "Y" ]]; then
 fi
 
 # Step 2: Install ripgrep
-read -p "Do you want to install ripgrep? (y/n): " install_ripgrep
+if [[ $NON_INTERACTIVE == true ]]; then
+  install_ripgrep=$([[ $INSTALL_ALL == true ]] && echo "y" || echo "n")
+else
+  read -p "Do you want to install ripgrep? (y/n): " install_ripgrep
+fi
+
 if [[ $install_ripgrep == "y" || $install_ripgrep == "Y" ]]; then
   if ! command_exists rg; then
     echo "Installing ripgrep..."
@@ -46,7 +103,12 @@ if [[ $install_ripgrep == "y" || $install_ripgrep == "Y" ]]; then
 fi
 
 # Step 3: Install Neovim, Lua 5.4, and LuaRocks, then download config
-read -p "Do you want to install Neovim and download the config? (y/n): " install_nvim
+if [[ $NON_INTERACTIVE == true ]]; then
+  install_nvim=$([[ $INSTALL_ALL == true ]] && echo "y" || echo "n")
+else
+  read -p "Do you want to install Neovim and download the config? (y/n): " install_nvim
+fi
+
 if [[ $install_nvim == "y" || $install_nvim == "Y" ]]; then
 
   # Install Lua 5.4 and LuaRocks
@@ -74,7 +136,12 @@ if [[ $install_nvim == "y" || $install_nvim == "Y" ]]; then
 fi
 
 # Step 4: Check if 'dig' exists, otherwise install
-read -p "Do you want to check if 'dig' is installed and install if necessary? (y/n): " install_dig
+if [[ $NON_INTERACTIVE == true ]]; then
+  install_dig=$([[ $INSTALL_ALL == true ]] && echo "y" || echo "n")
+else
+  read -p "Do you want to check if 'dig' is installed and install if necessary? (y/n): " install_dig
+fi
+
 if [[ $install_dig == "y" || $install_dig == "Y" ]]; then
   if ! command_exists dig; then
     echo "Installing dig..."
@@ -86,7 +153,12 @@ if [[ $install_dig == "y" || $install_dig == "Y" ]]; then
 fi
 
 # Step 5: Install zoxide
-read -p "Do you want to install zoxide? (y/n): " install_zoxide
+if [[ $NON_INTERACTIVE == true ]]; then
+  install_zoxide=$([[ $INSTALL_ALL == true ]] && echo "y" || echo "n")
+else
+  read -p "Do you want to install zoxide? (y/n): " install_zoxide
+fi
+
 if [[ $install_zoxide == "y" || $install_zoxide == "Y" ]]; then
   if ! command_exists zoxide; then
     echo "Installing zoxide..."
@@ -98,7 +170,12 @@ if [[ $install_zoxide == "y" || $install_zoxide == "Y" ]]; then
 fi
 
 # Step 6: Install tmux and oh-my-tmux
-read -p "Do you want to install tmux and oh-my-tmux? (y/n): " install_tmux
+if [[ $NON_INTERACTIVE == true ]]; then
+  install_tmux=$([[ $INSTALL_ALL == true ]] && echo "y" || echo "n")
+else
+  read -p "Do you want to install tmux and oh-my-tmux? (y/n): " install_tmux
+fi
+
 if [[ $install_tmux == "y" || $install_tmux == "Y" ]]; then
   if ! command_exists tmux; then
     echo "Installing tmux..."
@@ -115,7 +192,12 @@ if [[ $install_tmux == "y" || $install_tmux == "Y" ]]; then
 fi
 
 # Step 7: Install Node.js, npm, and tldr
-read -p "Do you want to install Node.js, npm, and tldr? (y/n): " install_node
+if [[ $NON_INTERACTIVE == true ]]; then
+  install_node=$([[ $INSTALL_ALL == true ]] && echo "y" || echo "n")
+else
+  read -p "Do you want to install Node.js, npm, and tldr? (y/n): " install_node
+fi
+
 if [[ $install_node == "y" || $install_node == "Y" ]]; then
   if ! command_exists node; then
     echo "Installing Node.js and npm..."
@@ -131,7 +213,12 @@ if [[ $install_node == "y" || $install_node == "Y" ]]; then
 fi
 
 # Step 8: Install Miniconda (auto-init conda + auto_activate_base)
-read -p "Do you want to install Miniconda? (y/n): " install_miniconda
+if [[ $NON_INTERACTIVE == true ]]; then
+  install_miniconda=$([[ $INSTALL_ALL == true ]] && echo "y" || echo "n")
+else
+  read -p "Do you want to install Miniconda? (y/n): " install_miniconda
+fi
+
 if [[ $install_miniconda == "y" || $install_miniconda == "Y" ]]; then
   if ! command_exists conda; then
     echo "Installing Miniconda..."

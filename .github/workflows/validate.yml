@@ -1,0 +1,69 @@
+name: Validate Installation Script
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  shellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Run ShellCheck
+        uses: ludeeus/action-shellcheck@master
+        with:
+          severity: warning
+          
+  markdown-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          
+      - name: Install markdownlint-cli
+        run: npm install -g markdownlint-cli
+        
+      - name: Run markdownlint
+        run: markdownlint README.md
+
+  test-script-on-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Check script syntax
+        run: bash -n install.sh
+        
+      - name: Make script executable
+        run: chmod +x install.sh
+        
+      - name: Test help option
+        run: ./install.sh --help
+        
+      - name: Test non-interactive mode
+        run: ./install.sh --non-interactive
+        
+      - name: Test install-all option (dry run only)
+        run: |
+          # Create a mock function to prevent actual installation in GitHub Actions
+          cat > test_script.sh << 'EOF'
+          #!/bin/bash
+          # Source the original script but override the brew command
+          function brew() { echo "Mock brew $@"; return 0; }
+          function git() { echo "Mock git $@"; return 0; }
+          function npm() { echo "Mock npm $@"; return 0; }
+          function curl() { echo "Mock curl $@"; return 0; }
+          function bash() { echo "Mock bash $@"; return 0; }
+          export -f brew git npm curl bash
+          ./install.sh --install-all
+          EOF
+          chmod +x test_script.sh
+          ./test_script.sh 

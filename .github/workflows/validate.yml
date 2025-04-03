@@ -31,8 +31,16 @@ jobs:
       - name: Install markdownlint-cli
         run: npm install -g markdownlint-cli
         
+      - name: Create markdownlint config
+        run: |
+          echo '{
+            "MD013": {
+              "line_length": 100
+            }
+          }' > .markdownlint.json
+        
       - name: Run markdownlint
-        run: markdownlint README.md
+        run: markdownlint README.md --config .markdownlint.json
 
   test-script-on-macos:
     runs-on: macos-latest

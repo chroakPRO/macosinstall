@@ -63,9 +63,7 @@ cd macosinstall
 If you want to install everything non-interactively from a one-liner:
 
 ```bash
-/bin/bash -c "$(curl -fsSL \
-  https://raw.githubusercontent.com/cyberapocalypse/macosinstall/main/install.sh) \
-  --install-all"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/cyberapocalypse/macosinstall/main/install.sh) --install-all"
 ```
 
 ## 🤝 Contributing

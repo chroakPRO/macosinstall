@@ -243,26 +243,5 @@ if [[ $install_miniconda == "y" || $install_miniconda == "Y" ]]; then
   fi
 fi
 
-# Step 9: Install Chrome, 1Password, Magnet, and Hidden Bar
-if [[ $NON_INTERACTIVE == true ]]; then
-  install_apps=$([[ $INSTALL_ALL == true ]] && echo "y" || echo "n")
-else
-  read -p "Do you want to install Chrome, 1Password, Magnet, and Hidden Bar? (y/n): " install_apps
-fi
-
-if [[ $install_apps == "y" || $install_apps == "Y" ]]; then
-  echo "Installing Chrome..."
-  brew install --cask google-chrome
-  
-  echo "Installing 1Password..."
-  brew install --cask 1password
-  
-  echo "Installing Magnet..."
-  brew install --cask magnet
-  
-  echo "Installing Hidden Bar..."
-  brew install --cask hiddenbar
-fi
-
 # Done
 echo "Setup complete!"

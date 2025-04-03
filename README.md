@@ -3,12 +3,12 @@
 A simple, customizable script for setting up your macOS development environment in
 minutes.
 
-![macOS Quick Setup](images/banner.png)
+![macOS Quick Setup](images/githubrepo.png)
 
 ## 🚀 One-Line Installation
 
 ```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/cyberapocalypse/macosinstall/main/install.sh)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/chroakPRO/macosinstall/main/install.sh)"
 ```
 
 This will run the installer in interactive mode, allowing you to choose which
@@ -53,7 +53,7 @@ Example advanced usage:
 
 ```bash
 # Clone the repository
-git clone https://github.com/cyberapocalypse/macosinstall.git
+git clone https://github.com/chroakPRO/macosinstall.git
 cd macosinstall
 
 # Show help
@@ -67,7 +67,7 @@ If you want to install everything non-interactively from a one-liner:
 
 ```bash
 /bin/bash -c "$(curl -fsSL \
-  https://raw.githubusercontent.com/cyberapocalypse/macosinstall/main/install.sh) \
+  https://raw.githubusercontent.com/chroakPRO/macosinstall/main/install.sh) \
   --install-all"
 ```
 

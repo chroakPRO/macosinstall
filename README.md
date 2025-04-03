@@ -3,7 +3,7 @@
 A simple, customizable script for setting up your macOS development environment in
 minutes.
 
-![macOS Quick Setup](images/githubrepo.png)
+![macOS Quick Setup](images/banner.png)
 
 ## 🚀 One-Line Installation
 
@@ -24,8 +24,9 @@ This script can install and configure:
 - **Text Editing**: Neovim with custom configuration
 - **Terminal Multiplexer**: Tmux with Oh-My-Tmux configuration
 - **Network Tools**: DNS lookup tools like dig
-- **Development Tools**: Node.js, npm, and helpful CLI tools like tldr
+- **Development Tools**: Node.js, npm, and pnpm package manager
 - **Python Environment**: Miniconda for Python development
+- **Applications**: Chrome, 1Password, Magnet, and Hidden Bar
 
 ## 🛠️ How It Works
 

@@ -191,11 +191,11 @@ if [[ $install_tmux == "y" || $install_tmux == "Y" ]]; then
   cp "$HOME/.tmux/.tmux.conf" "$HOME/.tmux.conf"
 fi
 
-# Step 7: Install Node.js, npm, and tldr
+# Step 7: Install Node.js, npm, and pnpm
 if [[ $NON_INTERACTIVE == true ]]; then
   install_node=$([[ $INSTALL_ALL == true ]] && echo "y" || echo "n")
 else
-  read -p "Do you want to install Node.js, npm, and tldr? (y/n): " install_node
+  read -p "Do you want to install Node.js, npm, and pnpm? (y/n): " install_node
 fi
 
 if [[ $install_node == "y" || $install_node == "Y" ]]; then
@@ -207,9 +207,9 @@ if [[ $install_node == "y" || $install_node == "Y" ]]; then
     echo "Node.js is already installed"
   fi
 
-  # Install tldr
-  echo "Installing tldr..."
-  npm install -g tldr
+  # Install pnpm
+  echo "Installing pnpm..."
+  npm install -g pnpm
 fi
 
 # Step 8: Install Miniconda (auto-init conda + auto_activate_base)
@@ -241,6 +241,27 @@ if [[ $install_miniconda == "y" || $install_miniconda == "Y" ]]; then
   else
     echo "A conda-based environment is already installed on this system."
   fi
+fi
+
+# Step 9: Install Chrome, 1Password, Magnet, and Hidden Bar
+if [[ $NON_INTERACTIVE == true ]]; then
+  install_apps=$([[ $INSTALL_ALL == true ]] && echo "y" || echo "n")
+else
+  read -p "Do you want to install Chrome, 1Password, Magnet, and Hidden Bar? (y/n): " install_apps
+fi
+
+if [[ $install_apps == "y" || $install_apps == "Y" ]]; then
+  echo "Installing Chrome..."
+  brew install --cask google-chrome
+  
+  echo "Installing 1Password..."
+  brew install --cask 1password
+  
+  echo "Installing Magnet..."
+  brew install --cask magnet
+  
+  echo "Installing Hidden Bar..."
+  brew install --cask hiddenbar
 fi
 
 # Done

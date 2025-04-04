@@ -253,6 +253,14 @@ install_component() {
         brew update
         brew install zoxide
         print_success "zoxide installed"
+        
+        # Add zoxide to shell configuration
+        if [[ -f "$HOME/.zshrc" ]]; then
+          if ! grep -q "zoxide init" "$HOME/.zshrc"; then
+            echo 'eval "$(zoxide init zsh)"' >> "$HOME/.zshrc"
+            print_success "zoxide configuration added to .zshrc"
+          fi
+        fi
       else
         print_info "zoxide is already installed"
       fi

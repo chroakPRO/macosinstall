@@ -3,7 +3,7 @@
 A simple, customizable script for setting up your macOS development environment in
 minutes.
 
-![macOS Quick Setup](images/githubrepo.png)
+![macOS Quick Setup](images/banner.png)
 
 ## 🚀 One-Line Installation
 

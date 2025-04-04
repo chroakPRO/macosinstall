@@ -11,8 +11,8 @@ minutes.
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/chroakPRO/macosinstall/main/install.sh)"
 ```
 
-This will run the installer in interactive mode, allowing you to choose which
-components to install.
+This will run the installer with a user-friendly interface that lets you select
+which components to install.
 
 ## ✨ Features
 
@@ -21,7 +21,7 @@ This script can install and configure:
 - **Shell**: Zsh with Oh-My-Zsh and custom configurations
 - **Navigation**: Zoxide for smarter directory jumping
 - **Text Searching**: Ripgrep for faster code searching
-- **Text Editing**: Neovim with custom configuration
+- **Text Editing**: Neovim with custom configuration and Cursor IDE
 - **Terminal Multiplexer**: Tmux with Oh-My-Tmux configuration
 - **Network Tools**: DNS lookup tools like dig
 - **Development Tools**: Node.js, npm, and pnpm package manager
@@ -30,9 +30,9 @@ This script can install and configure:
 
 ## 🛠️ How It Works
 
-The installer will ask for confirmation before each component installation,
-allowing you to customize your setup. All components are optional and can be
-skipped based on your preferences.
+The installer provides an intuitive multi-select menu where you can choose which
+components to install in a single step. The script will then automatically install
+and configure all selected components for you. No need to answer multiple prompts!
 
 ## 📋 Requirements
 

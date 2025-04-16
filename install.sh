@@ -7,7 +7,6 @@ YELLOW=$'\e[33m'
 BLUE=$'\e[34m'
 GRAY=$'\e[90m'
 BOLD=$'\e[1m'
-UNDERLINE=$'\e[4m'
 RESET=$'\e[0m'
 
 # Function to print with style
@@ -158,7 +157,7 @@ ensure_homebrew() {
     
     # Add Homebrew to PATH for ARM Macs if needed
     if [[ $(uname -m) == 'arm64' ]]; then
-      echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+      echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $HOME/.zprofile
       eval "$(/opt/homebrew/bin/brew shellenv)"
     fi
     print_success "Homebrew installed successfully"
@@ -230,7 +229,7 @@ install_component() {
       fi
 
       # Download Neovim config
-      print_cmd "git clone https://github.com/chroakPRO/nvimdot ~/.config/nvim"
+      print_cmd "git clone https://github.com/chroakPRO/nvimdot $HOME/.config/nvim"
       rm -rf "$HOME/.config/nvim"
       git clone https://github.com/chroakPRO/nvimdot "$HOME/.config/nvim"
       print_success "Neovim configuration complete"
@@ -277,7 +276,7 @@ install_component() {
       fi
 
       # Install oh-my-tmux
-      print_cmd "git clone https://github.com/chroakPRO/tmuxdot.git ~/.tmux"
+      print_cmd "git clone https://github.com/chroakPRO/tmuxdot.git $HOME/.tmux"
       git clone https://github.com/chroakPRO/tmuxdot.git "$HOME/.tmux"
       cp "$HOME/.tmux/.tmux.conf" "$HOME/.tmux.conf"
       print_success "tmux configuration complete"

@@ -303,15 +303,15 @@ install_component() {
         print_cmd "curl -o ~/miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh"
         curl -o "$HOME/miniconda.sh" https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh
         
-        print_cmd "bash ~/miniconda.sh -b -p ~/miniconda"
+        print_cmd "bash $HOME/miniconda.sh -b -p $HOME/miniconda"
         bash "$HOME/miniconda.sh" -b -p "$HOME/miniconda"
         rm "$HOME/miniconda.sh"
 
-        print_cmd "~/miniconda/bin/conda init bash zsh"
+        print_cmd "$HOME/miniconda/bin/conda init bash zsh"
         "$HOME/miniconda/bin/conda" init bash
         "$HOME/miniconda/bin/conda" init zsh
 
-        print_cmd "~/miniconda/bin/conda config --set auto_activate_base true"
+        print_cmd "$HOME/miniconda/bin/conda config --set auto_activate_base true"
         "$HOME/miniconda/bin/conda" config --set auto_activate_base true
 
         print_success "Miniconda installed"

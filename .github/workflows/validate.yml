@@ -12,33 +12,39 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Run ShellCheck
         uses: ludeeus/action-shellcheck@master
         with:
           severity: warning
-          
+
   markdown-lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '16'
-          
+
       - name: Install markdownlint-cli
         run: npm install -g markdownlint-cli
-        
+
       - name: Create markdownlint config
         run: |
           echo '{
             "MD013": {
               "line_length": 150
+            },
+            "MD003": {
+              "style": "consistent"
+            },
+            "MD0012": {
+              "maximum": "5"
             }
           }' > .markdownlint.json
-        
+
       - name: Run markdownlint
         run: markdownlint README.md --config .markdownlint.json
 
@@ -46,19 +52,19 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Check script syntax
         run: bash -n install.sh
-        
+
       - name: Make script executable
         run: chmod +x install.sh
-        
+
       - name: Test help option
         run: ./install.sh --help
-        
+
       - name: Test non-interactive mode
         run: ./install.sh --non-interactive
-        
+
       - name: Test install-all option (dry run only)
         run: |
           # Create a mock function to prevent actual installation in GitHub Actions
@@ -74,4 +80,4 @@ jobs:
           ./install.sh --install-all
           EOF
           chmod +x test_script.sh
-          ./test_script.sh 
+          ./test_script.sh

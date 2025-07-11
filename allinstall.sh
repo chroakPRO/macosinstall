@@ -114,12 +114,12 @@ if [[ $NON_INTERACTIVE == false ]]; then
 fi
 
 # Component definitions
-COMPONENT_NAMES=("zsh" "ripgrep" "neovim" "cursor" "dig" "zoxide" "tmux" "node" "miniconda" "apps" "all")
+COMPONENT_NAMES=("zsh" "fzf" "ripgrep" "neovim" "dig" "zoxide" "tmux" "node" "miniconda" "apps" "all")
 COMPONENT_DESCRIPTIONS=(
   "Zsh shell with Oh-My-Zsh"
+  "Fuzzy finder (fzf)"
   "Fast text search tool"
   "Advanced text editor"
-  "AI-powered code editor"
   "DNS lookup tools"
   "Smarter directory navigation"
   "Terminal multiplexer"
@@ -130,7 +130,7 @@ COMPONENT_DESCRIPTIONS=(
 )
 
 SHELL_COMPONENTS=("zsh")
-EDITOR_COMPONENTS=("ripgrep" "neovim" "cursor")
+EDITOR_COMPONENTS=("fzf" "ripgrep" "neovim")
 UTIL_COMPONENTS=("dig" "zoxide" "tmux")
 DEV_COMPONENTS=("node" "miniconda")
 APP_COMPONENTS=("apps")
@@ -214,6 +214,20 @@ install_component() {
       rm -rf "$HOME/.zshconfig"
       git clone https://github.com/chroakPRO/zshdot "$HOME/.zshconfig" || print_error "Failed to clone zsh configuration"
       print_success "zsh configuration complete"
+      ;;
+    "fzf")
+      if ! command_exists fzf; then
+        if [[ $OS == "macos" ]]; then
+          brew install fzf
+        elif [[ $OS == "ubuntu" ]]; then
+          sudo apt install -y fzf
+        elif [[ $OS == "arch" ]]; then
+          sudo pacman -S --noconfirm fzf
+        fi
+        print_success "fzf installed"
+      else
+        print_info "fzf is already installed"
+      fi
       ;;
     "ripgrep")
       if ! command_exists rg; then
@@ -353,18 +367,6 @@ install_component() {
         print_info "A conda-based environment is already installed"
       fi
       ;;
-    "cursor")
-      if ! command_exists cursor; then
-        if [[ $OS == "macos" ]]; then
-          brew install --cask cursor
-          print_success "Cursor IDE installed"
-        else
-          print_warning "Cursor IDE is only available on macOS (skipping)"
-        fi
-      else
-        print_info "Cursor IDE is already installed"
-      fi
-      ;;
     "apps")
       if [[ $OS == "macos" ]]; then
         brew install --cask google-chrome 1password magnet hiddenbar
@@ -381,23 +383,30 @@ ensure_pkg_manager
 
 if [[ $NON_INTERACTIVE == false ]]; then
   print_header "AVAILABLE COMPONENTS"
-  print_header "SHELL"
-  printf "%b%2d)%b %bZsh%b           │ Zsh shell with Oh-My-Zsh\n" "${BOLD}${CYAN}" "1" "${RESET}" "${BOLD}" "${RESET}"
-  print_header "TEXT EDITING"
-  printf "%b%2d)%b %bRipgrep%b       │ Fast text search tool\n" "${BOLD}${CYAN}" "2" "${RESET}" "${BOLD}" "${RESET}"
-  printf "%b%2d)%b %bNeovim%b        │ Advanced text editor\n" "${BOLD}${CYAN}" "3" "${RESET}" "${BOLD}" "${RESET}"
-  printf "%b%2d)%b %bCursor%b        │ AI-powered code editor\n" "${BOLD}${CYAN}" "4" "${RESET}" "${BOLD}" "${RESET}"
-  print_header "UTILITIES"
-  printf "%b%2d)%b %bDig%b           │ DNS lookup tools\n" "${BOLD}${CYAN}" "5" "${RESET}" "${BOLD}" "${RESET}"
-  printf "%b%2d)%b %bZoxide%b        │ Smarter directory navigation\n" "${BOLD}${CYAN}" "6" "${RESET}" "${BOLD}" "${RESET}"
-  printf "%b%2d)%b %bTmux%b          │ Terminal multiplexer\n" "${BOLD}${CYAN}" "7" "${RESET}" "${BOLD}" "${RESET}"
-  print_header "DEVELOPMENT"
-  printf "%b%2d)%b %bNode.js%b       │ Node.js with npm and pnpm\n" "${BOLD}${CYAN}" "8" "${RESET}" "${BOLD}" "${RESET}"
-  printf "%b%2d)%b %bMiniconda%b     │ Python environment manager\n" "${BOLD}${CYAN}" "9" "${RESET}" "${BOLD}" "${RESET}"
-  print_header "APPLICATIONS"
-  printf "%b%2d)%b %bApps%b          │ Chrome, 1Password, Magnet, Hidden Bar (macOS only)\n" "${BOLD}${CYAN}" "10" "${RESET}" "${BOLD}" "${RESET}"
-  print_header "QUICK INSTALL"
-  printf "%b%2d)%b %bAll%b           │ Install all components\n" "${BOLD}${CYAN}" "0" "${RESET}" "${BOLD}" "${RESET}"
+  # Improved menu layout
+  printf "\n%bSHELL%b\n" "${BOLD}${BLUE}" "${RESET}"
+  printf "  %b1)%b %-12s │ %s\n" "${BOLD}${CYAN}" "${RESET}" "Zsh" "Zsh shell with Oh-My-Zsh"
+
+  printf "\n%bTEXT EDITING & SEARCH%b\n" "${BOLD}${BLUE}" "${RESET}"
+  printf "  %b2)%b %-12s │ %s\n" "${BOLD}${CYAN}" "${RESET}" "fzf" "Fuzzy finder (fzf)"
+  printf "  %b3)%b %-12s │ %s\n" "${BOLD}${CYAN}" "${RESET}" "Ripgrep" "Fast text search tool"
+  printf "  %b4)%b %-12s │ %s\n" "${BOLD}${CYAN}" "${RESET}" "Neovim" "Advanced text editor"
+
+  printf "\n%bUTILITIES%b\n" "${BOLD}${BLUE}" "${RESET}"
+  printf "  %b5)%b %-12s │ %s\n" "${BOLD}${CYAN}" "${RESET}" "Dig" "DNS lookup tools"
+  printf "  %b6)%b %-12s │ %s\n" "${BOLD}${CYAN}" "${RESET}" "Zoxide" "Smarter directory navigation"
+  printf "  %b7)%b %-12s │ %s\n" "${BOLD}${CYAN}" "${RESET}" "Tmux" "Terminal multiplexer"
+
+  printf "\n%bDEVELOPMENT%b\n" "${BOLD}${BLUE}" "${RESET}"
+  printf "  %b8)%b %-12s │ %s\n" "${BOLD}${CYAN}" "${RESET}" "Node.js" "Node.js with npm and pnpm"
+  printf "  %b9)%b %-12s │ %s\n" "${BOLD}${CYAN}" "${RESET}" "Miniconda" "Python environment manager"
+
+  printf "\n%bAPPLICATIONS%b\n" "${BOLD}${BLUE}" "${RESET}"
+  printf "  %b10)%b %-12s │ %s\n" "${BOLD}${CYAN}" "${RESET}" "Apps" "Chrome, 1Password, Magnet, Hidden Bar (macOS only)"
+
+  printf "\n%bQUICK INSTALL%b\n" "${BOLD}${BLUE}" "${RESET}"
+  printf "  %b0)%b %-12s │ %s\n" "${BOLD}${CYAN}" "${RESET}" "All" "Install all components"
+
   printf "\n%b %s %b" "${BOLD}" "Select components to install (space-separated numbers, e.g. '1 3 7'):" "${RESET}"
   read -r choices
   SELECTED_COMPONENTS=()
@@ -407,9 +416,9 @@ if [[ $NON_INTERACTIVE == false ]]; then
     for choice in $choices; do
       case $choice in
         1) SELECTED_COMPONENTS+=("zsh") ;;
-        2) SELECTED_COMPONENTS+=("ripgrep") ;;
-        3) SELECTED_COMPONENTS+=("neovim") ;;
-        4) SELECTED_COMPONENTS+=("cursor") ;;
+        2) SELECTED_COMPONENTS+=("fzf") ;;
+        3) SELECTED_COMPONENTS+=("ripgrep") ;;
+        4) SELECTED_COMPONENTS+=("neovim") ;;
         5) SELECTED_COMPONENTS+=("dig") ;;
         6) SELECTED_COMPONENTS+=("zoxide") ;;
         7) SELECTED_COMPONENTS+=("tmux") ;;
